@@ -37,7 +37,7 @@ jobs:
         run: dotnet pack -c Release --no-restore --include-symbols --include-source -o ./nupkg ./src/FFT.IgnoreTasks/FFT.IgnoreTasks.csproj
 
       - name: Push to NuGet Feed
-        run: dotnet nuget push ./../nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_API_KEY
+        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_API_KEY
 
 #      - name: Build documentation
 #        uses: nikeee/docfx-action@v1.0.0
