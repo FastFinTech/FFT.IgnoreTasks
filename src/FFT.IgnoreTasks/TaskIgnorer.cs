@@ -16,6 +16,7 @@ namespace FFT.IgnoreTasks
   /// cref="ValueTask"/> objects as they complete in the background, observing
   /// but not throwing exceptions, and preventing memory-leak performance
   /// degradation.
+  /// <see href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
   /// </summary>
   public static class TaskIgnorer
   {
@@ -47,6 +48,7 @@ namespace FFT.IgnoreTasks
     /// <summary>
     /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
     /// <param name="task">The task to be ignored.</param>
+    /// <see href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
     /// </summary>
     public static void Ignore(this ValueTask task)
     {
@@ -70,6 +72,7 @@ namespace FFT.IgnoreTasks
     /// <summary>
     /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
     /// <param name="task">The task to be ignored.</param>
+    /// <see href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
     /// </summary>
     public static void Ignore<T>(this ValueTask<T> task)
     {
