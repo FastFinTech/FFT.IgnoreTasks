@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{196EFBF0-D017-4F51-B4E1-16FE5C9351F0}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitignore = ..\.gitignore
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\LICENSE = ..\LICENSE
+		..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
+		..\README.md = ..\README.md
+		..\stylecop.json = ..\stylecop.json
+		..\version.json = ..\version.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFT.IgnoreTasks", "FFT.IgnoreTasks\FFT.IgnoreTasks.csproj", "{797B4A15-F4A5-4B27-A598-02F184AE8378}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{797B4A15-F4A5-4B27-A598-02F184AE8378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{797B4A15-F4A5-4B27-A598-02F184AE8378}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{797B4A15-F4A5-4B27-A598-02F184AE8378}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{797B4A15-F4A5-4B27-A598-02F184AE8378}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FEAFF137-FFB5-40A3-86F8-7FB7E00598CF}
+	EndGlobalSection
+EndGlobal
