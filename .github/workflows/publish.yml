@@ -34,7 +34,7 @@ jobs:
         run: dotnet build ./src -c Release --no-restore
 
       - name: Pack
-        run: dotnet pack -v minimal -c Release --no-restore --include-symbols --include-source -o nupkg ./src/FFT.IgnoreTasks/FFT.IgnoreTasks.csproj
+        run: dotnet pack -v minimal -c Release --no-restore --include-symbols --include-source -o ./nupkg ./src/FFT.IgnoreTasks/FFT.IgnoreTasks.csproj
 
       - name: Push to NuGet Feed
         run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_API_KEY
