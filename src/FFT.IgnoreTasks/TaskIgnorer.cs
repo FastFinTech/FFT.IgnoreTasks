@@ -24,6 +24,7 @@ namespace FFT.IgnoreTasks
     /// <summary>
     /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
     /// <param name="task">The task to be ignored.</param>
+    /// </summary>
     public static void Ignore(this Task task)
     {
       if (task.IsCompleted)
@@ -46,6 +47,7 @@ namespace FFT.IgnoreTasks
     /// <summary>
     /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
     /// <param name="task">The task to be ignored.</param>
+    /// </summary>
     public static void Ignore(this ValueTask task)
     {
       if (task.IsCompleted)
@@ -68,6 +70,7 @@ namespace FFT.IgnoreTasks
     /// <summary>
     /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
     /// <param name="task">The task to be ignored.</param>
+    /// </summary>
     public static void Ignore<T>(this ValueTask<T> task)
     {
       if (task.IsCompleted)
