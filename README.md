@@ -41,7 +41,7 @@ At the time of writing, a `ValueTask` can be either of three kinds:
 
 Most of the time, you don't know which of these kinds is used by the method returning the `ValueTask`. Often the kind will vary depending on whether the method was able to complete itself synchronously.
 
-Efficiently-written libraries often use object pooling to reuse the `ValueTaskSource` objects wrapped by the `ValueTask` objects they return. If you do not await or observe the result of the `ValueTask`, the library is unable to recycle those objects back to their pool, and either a memory leak will occur, or performance degradation due to higher rate of heap allocation, depending on how the library handles its references to the `ValueTaskSource` objects.
+Efficiently-written libraries often use object pooling to reuse the `ValueTaskSource` objects wrapped by the `ValueTask` objects they return. If you do not await or observe the result of the `ValueTask`, the library is unable to recycle those objects back to their pool, and either a memory leak will occur (rare), or performance degradation due to higher rate of heap allocation (common), depending on how the library handles its references to the `ValueTaskSource` objects.
 
 When a `ValueTask` object wraps a `Task`, and you don't await the `ValueTask` or observe its result or exception, the underlying `Task` exception will go unobserved and potentially get thrown in the finalizer thread.
 

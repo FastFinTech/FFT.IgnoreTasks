@@ -28,12 +28,11 @@ namespace FFT.IgnoreTasks
     /// </summary>
     public static void Ignore(this Task task)
     {
+      // TODO: Benchmark see if it's worthwhile reading the task.Status
+      // property to find a way to gain a little performance.
       if (task.IsCompleted)
       {
-        if (task.Status != TaskStatus.RanToCompletion)
-        {
-          _ = task.Exception;
-        }
+        _ = task.Exception;
       }
       else
       {
@@ -54,18 +53,17 @@ namespace FFT.IgnoreTasks
     {
       if (task.IsCompleted)
       {
-        if (task.IsCompletedSuccessfully)
-        {
-          task.GetAwaiter().GetResult();
-        }
-        else
-        {
-          try { task.GetAwaiter().GetResult(); } catch { }
-        }
+        // TODO: Benchmark see if a success completed check eliding the
+        // try/catch is a worthwhile performance gain.
+        try { task.GetAwaiter().GetResult(); } catch { }
       }
       else
       {
-        task.AsTask().Ignore();
+        task.AsTask().ContinueWith(
+            _observeExeption,
+            CancellationToken.None,
+            OnlyOnFaulted | ExecuteSynchronously,
+            TaskScheduler.Default);
       }
     }
 
@@ -78,18 +76,17 @@ namespace FFT.IgnoreTasks
     {
       if (task.IsCompleted)
       {
-        if (task.IsCompletedSuccessfully)
-        {
-          task.GetAwaiter().GetResult();
-        }
-        else
-        {
-          try { task.GetAwaiter().GetResult(); } catch { }
-        }
+        // TODO: Benchmark see if a success completed check eliding the
+        // try/catch is a worthwhile performance gain.
+        try { task.GetAwaiter().GetResult(); } catch { }
       }
       else
       {
-        task.AsTask().Ignore();
+        task.AsTask().ContinueWith(
+            _observeExeption,
+            CancellationToken.None,
+            OnlyOnFaulted | ExecuteSynchronously,
+            TaskScheduler.Default);
       }
     }
   }
