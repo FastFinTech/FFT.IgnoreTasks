@@ -20,16 +20,16 @@ namespace FFT.IgnoreTasks
   /// </summary>
   public static class TaskIgnorer
   {
-    private static readonly Action<Task> _observeExeption = t => { _ = t.Exception; };
+    private static readonly Action<Task> _observeException = t => { _ = t.Exception; };
 
     /// <summary>
-    /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
-    /// <param name="task">The task to be ignored.</param>
+    /// Prevent unobserved exceptions and other performance degradations on a
+    /// task that you wish to fire-and-forget.
+    /// <see href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
     /// </summary>
+    /// <param name="task">The task to be ignored.</param>
     public static void Ignore(this Task task)
     {
-      // TODO: Benchmark see if it's worthwhile reading the task.Status
-      // property to find a way to gain a little performance.
       if (task.IsCompleted)
       {
         _ = task.Exception;
@@ -37,7 +37,7 @@ namespace FFT.IgnoreTasks
       else
       {
         task.ContinueWith(
-            _observeExeption,
+            _observeException,
             CancellationToken.None,
             OnlyOnFaulted | ExecuteSynchronously,
             TaskScheduler.Default);
@@ -45,48 +45,86 @@ namespace FFT.IgnoreTasks
     }
 
     /// <summary>
-    /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
-    /// <param name="task">The task to be ignored.</param>
+    /// Prevent unobserved exceptions and other performance degradations caused
+    /// by an unobserved result on a ValueTask that you wish to fire-and-forget.
     /// <see href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
     /// </summary>
+    /// <param name="task">The task to be ignored.</param>
     public static void Ignore(this ValueTask task)
     {
       if (task.IsCompleted)
       {
-        // TODO: Benchmark see if a success completed check eliding the
-        // try/catch is a worthwhile performance gain.
-        try { task.GetAwaiter().GetResult(); } catch { }
+        try
+        {
+          task.GetAwaiter().GetResult();
+        }
+        catch { }
       }
       else
       {
-        task.AsTask().ContinueWith(
-            _observeExeption,
-            CancellationToken.None,
-            OnlyOnFaulted | ExecuteSynchronously,
-            TaskScheduler.Default);
+        task.GetAwaiter().OnCompleted(() =>
+        {
+          try
+          {
+            task.GetAwaiter().GetResult();
+          }
+          catch { }
+        });
       }
     }
 
     /// <summary>
-    /// Prevent unobserved exceptions and other performance degradations on a task that you wish to fire-and-forget.
-    /// <param name="task">The task to be ignored.</param>
+    /// Prevent unobserved exceptions and other performance degradations caused
+    /// by an unobserved result on a ValueTask that you wish to fire-and-forget.
     /// <see href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
     /// </summary>
+    /// <param name="task">The task to be ignored.</param>
     public static void Ignore<T>(this ValueTask<T> task)
     {
       if (task.IsCompleted)
       {
-        // TODO: Benchmark see if a success completed check eliding the
-        // try/catch is a worthwhile performance gain.
-        try { task.GetAwaiter().GetResult(); } catch { }
+        try
+        {
+          _ = task.GetAwaiter().GetResult();
+        }
+        catch { }
       }
       else
       {
-        task.AsTask().ContinueWith(
-            _observeExeption,
-            CancellationToken.None,
-            OnlyOnFaulted | ExecuteSynchronously,
-            TaskScheduler.Default);
+        task.GetAwaiter().OnCompleted(() =>
+        {
+          try
+          {
+            _ = task.GetAwaiter().GetResult();
+          }
+          catch { }
+        });
+      }
+    }
+
+    /// <summary>
+    /// Prevents performance degradation by observing the result/exception of a
+    /// <see cref="ValueTask{TResult}"/> while converting it to a <see
+    /// cref="ValueTask"/>. <see
+    /// href="https://github.com/FastFinTech/FFT.IgnoreTasks"/>.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="ValueTask"/> representing completion of the <paramref
+    /// name="task"/>.
+    /// </returns>
+    public static ValueTask WithoutResult<T>(this ValueTask<T> task)
+    {
+      if (task.IsCompletedSuccessfully)
+      {
+        _ = task.GetAwaiter().GetResult();
+        return default;
+      }
+
+      return ToValueTaskAsync(task);
+
+      static async ValueTask ToValueTaskAsync(ValueTask<T> task)
+      {
+        _ = await task;
       }
     }
   }

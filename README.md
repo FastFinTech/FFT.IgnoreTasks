@@ -30,14 +30,14 @@ In addition, [Code Analysis Rule CA2012](https://docs.microsoft.com/en-us/dotnet
 ```csharp
 // WRONG! Don't do this!
 // send the data fire-and-forget style and don't observe the result
-_ = _socket.SendAsync(myBytes); // did not await the `ValueTask` or observe its result or exception.
+_ = socket.SendAsync(myBytes); // did not await the `ValueTask` or observe its result or exception.
 ```
 
 At the time of writing, a `ValueTask` can be either of three kinds:
 
 - Result value wrapper
 - Reference `Task` wrapper
-- `ValueTaskSource` wrapper
+- `IValueTaskSource` wrapper
 
 Most of the time, you don't know which of these kinds is used by the method returning the `ValueTask`. Often the kind will vary depending on whether the method was able to complete itself synchronously.
 
@@ -45,7 +45,7 @@ Efficiently-written libraries often use object pooling to reuse the `ValueTaskSo
 
 When a `ValueTask` object wraps a `Task`, and you don't await the `ValueTask` or observe its result or exception, the underlying `Task` exception will go unobserved and potentially get thrown in the finalizer thread.
 
-Therefore, even if YOU don't care about the result of the `ValueTask` you want to fire-and-forget, the underlying system needs you do make sure the result or exception of the `ValueTask` is observed so it can do its job efficiently.
+Therefore, even if YOU don't care about the result of the `ValueTask` you want to fire-and-forget, the underlying system needs you do make sure BOTH the result AND exception of the `ValueTask` or `ValueTask<T>` are observed so it can do its job efficiently.
 
 Here's how to do it using `FFT.IgnoreTasks`
 
