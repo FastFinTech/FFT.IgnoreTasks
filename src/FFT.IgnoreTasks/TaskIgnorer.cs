@@ -44,6 +44,8 @@ namespace FFT.IgnoreTasks
       }
     }
 
+#if NET
+
     /// <summary>
     /// Prevent unobserved exceptions and other performance degradations caused
     /// by an unobserved result on a ValueTask that you wish to fire-and-forget.
@@ -127,5 +129,6 @@ namespace FFT.IgnoreTasks
         _ = await task;
       }
     }
+#endif
   }
 }
